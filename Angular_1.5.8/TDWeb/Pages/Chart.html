@@ -1,0 +1,223 @@
+﻿<div id="ChartPage">
+    <md-content class="md-content">
+        <h1>Gráfico de preços e taxas dos títulos do Tesouro Direto</h1>
+        <p>
+            <span>Crie gráfico dos títulos do Tesouro Direto de maneira simples e intuitiva atualizado diariamente.</span>
+            <br />
+            <br />
+            <span>Compare preços e taxas dos títulos do Tesouro Direto, inclua médias móveis e índices de mercado financeiro como a taxa Selic. De forma gráfica fica muito mais fácil acompanhar a rentabilidade dos títulos do Tesouro Direto.</span>
+        </p>
+    </md-content>
+    <br />
+    <form name="chartForm">
+        <div>
+            <md-toolbar ng-click="showAll = !showAll">
+                <div class="md-toolbar-tools">
+                    <h1 class="md-flex">Títulos Tesouro Direto</h1>
+                    <span flex></span>
+                    <md-icon ng-show="showAll" class="fa fa-chevron-up"></md-icon>
+                    <md-icon ng-show="!showAll" class="fa fa-chevron-down"></md-icon>
+                </div>
+            </md-toolbar>
+            <md-content flex layout-padding layout-gt-sm="row" layout="column" ng-show="showAll">
+                <div flex-gt-sm="28" flex>
+                    <md-toolbar layout="row" class="md-hue-3" ng-init="showIPCA = true" ng-click="showIPCA = !showIPCA">
+                        <div class="md-toolbar-tools">
+                            <span>Indexados ao IPCA</span>
+                            <span flex></span>
+                            <md-icon ng-show="showIPCA" class="fa fa-chevron-up"></md-icon>
+                            <md-icon ng-show="!showIPCA" class="fa fa-chevron-down"></md-icon>
+                        </div>
+                    </md-toolbar>
+                    <md-content ng-show="showIPCA">
+                        <md-list flex>
+                            <md-list-item ng-repeat="item in chartCtr.vm.BondList | filter:{Bond:'ipca'}" ng-click="chartCtr.OpenChart(item.Id)" ng-class="{'md-list-item-active': item.IsSelected()}">
+                                <span>{{ item.Name }}</span>
+                                <span flex></span>
+                                <md-button href="{{item.BondUrl()}}"
+                                           title="Abrir o título {{item.Name}} em uma nova janela"
+                                           target="_blank"
+                                           aria-label="{{item.Name}}"
+                                           class="md-icon-button launch">
+                                    <md-icon class="fa fa-external-link" aria-hidden="true"></md-icon>
+                                </md-button>
+                                <!--<div flex>
+                                    <section layout="row">
+                                        <md-button ng-click="save('0')" class="md-raised md-primary">left</md-button>
+                                        <md-button ng-click="save('1')" class="md-raised md-primary">middle</md-button>
+                                        <md-button ng-click="save('2')" class="md-raised md-primary">right</md-button>
+                                        <md-button ng-click="save('2')" class="md-raised md-primary">right</md-button>
+                                    </section>
+                                </div>-->
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+                </div>
+                <div flex-gt-sm="28" flex>
+                    <md-toolbar layout="row" class="md-hue-3" ng-init="showPre = true" ng-click="showPre = !showPre">
+                        <div class="md-toolbar-tools">
+                            <span>Prefixados</span>
+                            <span flex></span>
+                            <md-icon ng-show="showPre" class="fa fa-chevron-up"></md-icon>
+                            <md-icon ng-show="!showPre" class="fa fa-chevron-down"></md-icon>
+                        </div>
+                    </md-toolbar>
+                    <md-content ng-show="showPre">
+                        <md-list flex>
+                            <md-list-item ng-repeat="item in chartCtr.vm.BondList | filter:{Bond:'prefixado'}" ng-click="chartCtr.OpenChart(item.Id)" ng-class="{'md-list-item-active': item.IsSelected()}">
+                                <span>{{ item.Name }}</span>
+                                <span flex></span>
+                                <md-button href="{{item.BondUrl()}}"
+                                           title="Abrir o título {{item.Name}} em uma nova janela"
+                                           target="_blank"
+                                           aria-label="{{item.Name}}"
+                                           class="md-icon-button launch">
+                                    <md-icon class="fa fa-external-link" aria-hidden="true"></md-icon>
+                                </md-button>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+                </div>
+                <div flex-gt-sm="24" flex>
+                    <md-toolbar layout="row" class="md-hue-3" ng-init="showSelic = true" ng-click="showSelic = !showSelic">
+                        <div class="md-toolbar-tools">
+                            <span>Indexados à Taxa Selic</span>
+                            <span flex></span>
+                            <md-icon ng-show="showSelic" class="fa fa-chevron-up"></md-icon>
+                            <md-icon ng-show="!showSelic" class="fa fa-chevron-down"></md-icon>
+                        </div>
+                    </md-toolbar>
+                    <md-content ng-show="showSelic">
+                        <md-list flex>
+                            <md-list-item ng-repeat="item in chartCtr.vm.BondList | filter:{Bond:'selic'}" ng-click="chartCtr.OpenChart(item.Id)" ng-class="{'md-list-item-active': item.IsSelected()}">
+                                <span>{{ item.Name }}</span>
+                                <span flex></span>
+                                <md-button href="{{item.BondUrl()}}"
+                                           title="Abrir o título {{item.Name}} em uma nova janela"
+                                           target="_blank"
+                                           aria-label="{{item.Name}}"
+                                           class="md-icon-button launch">
+                                    <md-icon class="fa fa-external-link" aria-hidden="true"></md-icon>
+                                </md-button>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+                    <md-toolbar layout="row" class="md-hue-3" ng-init="showIGPM = true" ng-click="showIGPM = !showIGPM">
+                        <div class="md-toolbar-tools">
+                            <span>Indexados ao IGPM</span>
+                            <span flex></span>
+                            <md-icon ng-show="showIGPM" class="fa fa-chevron-up"></md-icon>
+                            <md-icon ng-show="!showIGPM" class="fa fa-chevron-down"></md-icon>
+                        </div>
+                    </md-toolbar>
+                    <md-content ng-show="showIGPM">
+                        <md-list flex>
+                            <md-list-item ng-repeat="item in chartCtr.vm.BondList | filter:{Bond:'igpm'}" ng-click="chartCtr.OpenChart(item.Id)" ng-class="{'md-list-item-active': item.IsSelected()}">
+                                <span>{{ item.Name }}</span>
+                                <span flex></span>
+                                <md-button href="{{item.BondUrl()}}"
+                                           title="Abrir o título {{item.Name}} em uma nova janela"
+                                           target="_blank"
+                                           aria-label="{{item.Name}}"
+                                           class="md-icon-button launch">
+                                    <md-icon class="fa fa-external-link" aria-hidden="true"></md-icon>
+                                </md-button>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+                </div>
+                <div flex-gt-sm="15" flex>
+                    <md-toolbar layout="row" class="md-hue-3" ng-init="showIndexs = true" ng-click="showIndexs = !showIndexs">
+                        <div class="md-toolbar-tools">
+                            <span>Índices</span>
+                            <span flex></span>
+                            <md-icon ng-show="showIndexs" class="fa fa-chevron-up"></md-icon>
+                            <md-icon ng-show="!showIndexs" class="fa fa-chevron-down"></md-icon>
+                        </div>
+                    </md-toolbar>
+                    <md-content ng-show="showIndexs">
+                        <md-list flex>
+                            <md-list-item ng-repeat="item in chartCtr.vm.IndicesList" ng-click="chartCtr.OpenIndice(item.Id, !item.IsSelected)" ng-class="{'md-list-item-active': item.IsSelected}">
+                                <span>{{ item.Name }}</span>
+                                <span flex></span>
+                                <md-button href="{{item.IndiceUrl()}}"
+                                           title="Abrir o título {{item.Name}} em uma nova janela"
+                                           target="_blank"
+                                           aria-label="{{item.Name}}"
+                                           class="md-icon-button launch">
+                                    <md-icon class="fa fa-external-link" aria-hidden="true"></md-icon>
+                                </md-button>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+                </div>
+            </md-content>
+        </div>
+    </form>
+    <br />
+    <br />
+    <md-toolbar ng-init="showBond = true" ng-click="showBond = !showBond">
+        <div class="md-toolbar-tools">
+            <h2 class="md-flex">{{chartCtr.vm.SelectedBondNames()}}</h2>
+            <span flex></span>
+            <md-icon ng-show="showBond" class="fa fa-chevron-up"></md-icon>
+            <md-icon ng-show="!showBond" class="fa fa-chevron-down"></md-icon>
+        </div>
+    </md-toolbar>
+    <md-content ng-show="showBond" flex layout-padding layout-gt-sm="row" layout="column">
+        <div flex ng-show="chartCtr.vm.CanShowComparation()" id="boxes-chart">
+            <div flex>
+                <p>
+                    <span>Compare o preço pela taxa contratada e o preço pela taxa de venda antecipada (marcação à mercado).</span>
+                    <br />
+                    <span>Para quem deseja verificar se o rendimento do título está acima ou abaixo do contratado, esse é um excelente gráfico.</span>
+                    <br />
+                    <br />
+                    <span>Escolha a data de compra do seu título e faça sua comparação (valor aproximado)</span>
+                </p>
+            </div>
+            <br />
+            <div flex layout-padding layout-gt-sm="row" layout="column">
+                <div flex>
+                    <md-input-container>
+                        <label>Preço Teórico</label>
+                        <md-input-container>
+                            <md-switch ng-model="chartCtr.vm.CompareMaturityBond" ng-change="chartCtr.CompareWithMaturityBond()">'Preço compra' vs 'Preço mercado'</md-switch>
+                        </md-input-container>
+                    </md-input-container>
+                </div>
+                <div flex>
+                    <md-input-container>
+                        <label>Data compra título</label>
+                        <md-datepicker ng-model="chartCtr.vm.DateBuy" name="dateField" md-min-date="chartCtr.vm.MinDate"
+                                       md-max-date="chartCtr.vm.MaxDate" ng-change="chartCtr.UpdateDateBuy()" md-date-filter="chartCtr.vm.OnlyWeekDays"></md-datepicker>
+                        <div ng-messages="chartForm.dateField.$error">
+                            <div ng-message="valid">Oops, esta não é uma data válida!</div>
+                            <!--<div ng-message="required">This date is required!</div>-->
+                            <div ng-message="mindate">Date menor que a menor data disponível!</div>
+                            <div ng-message="maxdate">Data maior que a data atual</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex-gt-sm="25">
+                </div>
+            </div>
+        </div>
+        <!--<div flex-gt-sm="25" id="boxes-chart" style="margin-left:5px">
+            <md-input-container>
+                <label>Dados históricos</label>
+                <md-input-container>
+                    <md-switch ng-model="chartCtr.vm.HistoricalData" ng-change="chartCtr.HistoricalDataChange()">Carregar dados desde 2008</md-switch>
+                </md-input-container>
+            </md-input-container>
+        </div>-->
+    </md-content>
+    <md-content>
+        <div id="chart-container"></div>
+        <br />
+        <div layout="row" layout-align="right center">
+            <span flex></span>
+            <a href="http://www.tesourodireto.gov.br">Fonte:&nbsp www.tesourodireto.gov.br</a>
+        </div>
+    </md-content>
+</div>

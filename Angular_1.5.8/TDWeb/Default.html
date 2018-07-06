@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<!--TODO: ng-strict-di/ng-cloak-->
+<html ng-app="TesouroGragicosApp" lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Analise e compare preços e taxas dos títulos do Tesouro Direto com gráficos atualizados diariamente. Médias móveis e taxa Selic disponíveis.">
+    <meta name="msvalidate.01" content="C623493C4EEE73306B49C7EC8B512698" />
+    <link rel="icon" href="/Content/Images/favicon.png">
+    <meta http-equiv="content-language" content="pt-br" />
+    <link rel="alternate" href="tesdir.com.br" hreflang="pt-br" />
+    <title>Gráfico de preços e taxas dos títulos do Tesouro Direto</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic"></noscript>
+
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+    <script>
+        /*! loadCSS: load a CSS file asynchronously. [c]2016 @scottjehl, Filament Group, Inc. Licensed MIT */
+        (function (n) { "use strict"; var t = function (t, i, r) { function l(n) { if (f.body) return n(); setTimeout(function () { l(n) }) } function c() { u.addEventListener && u.removeEventListener("load", c); u.media = r || "all" } var f = n.document, u = f.createElement("link"), e, s, h, o; return i ? e = i : (s = (f.body || f.getElementsByTagName("head")[0]).childNodes, e = s[s.length - 1]), h = f.styleSheets, u.rel = "stylesheet", u.href = t, u.media = "only x", l(function () { e.parentNode.insertBefore(u, i ? e : e.nextSibling) }), o = function (n) { for (var i = u.href, t = h.length; t--;) if (h[t].href === i) return n(); setTimeout(function () { o(n) }) }, u.addEventListener && u.addEventListener("load", c), u.onloadcssdefined = o, o(c), u }; typeof exports != "undefined" ? exports.loadCSS = t : n.loadCSS = t })(typeof global != "undefined" ? global : this);
+    </script>
+    <style type="text/css">
+        .tesouro-graficos {
+            background-color: #f3f3f4;
+            height: auto;
+        }
+
+        .lightGreen {
+            color: #1ab394;
+        }
+
+        .layout-padding, .layout-padding-gt-sm, .layout-padding-md, .layout-padding > *, .layout-padding-gt-sm > *, .layout-padding-md > *, .layout-padding > .flex, .layout-padding > .flex-gt-sm, .layout-padding > .flex-md {
+            padding: 0px;
+        }
+
+        md-list-item.md-no-proxy.md-button, md-list-item .md-no-style.md-button {
+            font-size: 12px;
+        }
+
+        .md-list-item-active {
+            background-color: #1AB394;
+            border: solid 1px #F3F3F4;
+        }
+
+        md-input-container {
+            margin: 10px 0;
+        }
+
+        md-content {
+            padding: 0;
+        }
+
+        #ComparisonLinearPrice {
+            padding: 10px;
+            background-color: white;
+            margin-bottom: 10px;
+        }
+
+        #boxes-chart {
+            padding: 10px;
+            margin: 10px;
+            background-color: white;
+        }
+
+        .md-content {
+            padding: 10px;
+        }
+
+        .datepickerdemoBasicUsage md-content {
+            padding-bottom: 200px;
+        }
+
+        .datepickerdemoBasicUsage .validation-messages {
+            font-size: 12px;
+            color: #dd2c00;
+            margin-left: 15px;
+        }
+
+        md-input-container .md-input {
+            width: 150px;
+        }
+
+        .fa-external-link {
+            opacity: 0.5;
+            margin-top: 5px;
+        }
+
+            .fa-external-link:hover {
+                opacity: unset;
+            }
+
+        @media(min-width:768px) {
+        }
+    </style>
+</head>
+<body class="tesouro-graficos">
+    <!--//TODo: Colocar progress bar-->
+    <!--<md-progress-linear md-mode="indeterminate"></md-progress-linear>-->
+    <div class="container">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header logo">
+                    <a class="navbar-brand" href="#"><img src="/Content/Images/favicon.png" class="img-responsive" alt="Logo TesDir"></a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="nav-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="/#/titulo/vencido">Títulos Vencidos</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/#/sobre">Sobre</a></li>
+                        <li><a href="/#/indice/selic">Taxa Selic</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div flex>
+            <article ng-view>
+                <md-content style="padding:10px">
+                    <h1>Gráfico de preços e taxas dos títulos do Tesouro Direto</h1>
+                    <p>
+                        <span>Crie gráfico dos títulos do Tesouro Direto de maneira simples e intuitiva atualizado diariamente.</span>
+                        <br />
+                        <span>Compare preços e taxas dos títulos do Tesouro Direto, inclua médias móveis e índices de mercado financeiro como a taxa Selic. De forma gráfica fica muito mais fácil acompanhar a rentabilidade dos títulos do Tesouro Direto.</span>
+                        <br />
+                        <br />
+                        <span>Para os títulos prefixados (LTN), há a possibilidade de comparação entre o Preço contratado e o Preço de mercado (marcação à mercado), ferramenta útil para quem deseja vender o título antes do vencimento e deseja garantir uma rentabilidade superior à taxa contratada.</span>
+                    </p>
+                </md-content>
+            </article>
+        </div>
+        <br />
+        <footer flex>
+            <md-content style="padding:10px">
+                <div layout="column">
+                    <span>
+                        As informações disponibilizadas neste site são meramente educativas. Este site não se responsabiliza por qualquer possível incorreção ou falha técnica existente. Recomenda-se que os usuários busquem informações oficiais e de assessoria financeira antes de decidir sobre um instrumento financeiro específico.
+                    </span>
+                    <br />
+                    <span>Este site não recomenda nenhum instrumento financeiro em particular, e declara que não recebe remuneração, publicidade ou divulgação de qualquer agente financeiro, empresa ou governo.</span>
+                </div>
+            </md-content>
+        </footer>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.js"></script>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+
+    <!--<script src="App_Scripts/Features/Technical-Indicator.js"></script>
+    <script src="scripts/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
+    <script src="App_Scripts/script.js"></script>-->
+
+    <script src="App_Scripts/geraljs.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" defer></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js" defer></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-12796001-14', 'auto');
+        ga('send', 'pageview');
+    </script>
+</body>
+</html>

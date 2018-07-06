@@ -1,0 +1,17 @@
+[
+  {
+    "outputFileName": "Content/main.min.css",
+    "inputFiles": [
+      "Content/main.css"
+    ]
+  },
+  {
+    "outputFileName": "App_Scripts/geraljs.min.js",
+    "inputFiles": [
+      "App_Scripts/geraljs.js",
+      "scripts/jquery.mask.min.js",
+      "App_Scripts/Features/Technical-Indicator.js",
+      "scripts/moment.min.js"
+    ]
+  }
+]

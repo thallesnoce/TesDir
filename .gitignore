@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Angular_1.5.8/.vs
+/Angular_1.5.8/TDService/bin/Debug
+/Angular_1.5.8/TDWeb/bin
+/Angular_1.5.8/TDWeb/obj
+/Angular_1.5.8/TDService/obj
+/Angular_1.5.8/TDWeb/App_Repo
+/Angular_1.5.8/TDService/Common/Constant.cs
+/Angular_1.5.8/packages
